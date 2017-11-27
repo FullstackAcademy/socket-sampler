@@ -1,0 +1,45 @@
+<head>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
+  <script>
+function hashCode(str) { // java String#hashCode
+    var hash = 0;
+    for (var i = 0; i < str.length; i++) {
+       hash = str.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    return hash;
+}
+
+function intToRGB(i){
+    var c = (i & 0x00FFFFFF)
+        .toString(16)
+        .toUpperCase();
+
+    return "00000".substring(0, 6 - c.length) + c;
+}
+
+    const socket = io()
+    window.addEventListener('mousemove', event => {
+      socket.emit('telemetry', 100* (event.clientX / window.innerWidth))
+    })
+
+    socket.on('all-data', allData => {
+      let gradient = []
+      Object.entries(allData)
+      .sort(([key, pos], [key2, pos2]) => {
+        return pos > pos2
+      })
+      .forEach(([key, pos]) => {
+        gradient.push('#' + intToRGB(hashCode(key)) + ' ' + pos+'%')
+      })
+      let css = `linear-gradient(to right, ${gradient.join(',')})`
+      document.body.style.background = css
+    })
+  </script>
+<style>
+  body, html {
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+  }
+</style>
+</head>
