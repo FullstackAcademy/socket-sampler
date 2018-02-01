@@ -9,7 +9,7 @@ const users = {}
 
 io.on('connection', function(socket){
   console.log('a user connected')
-  users[socket.id] = { x: 0 }
+  users[socket.id] = 0
   socket.on('disconnect', function(){
     delete users[socket.id]
   })
@@ -17,6 +17,7 @@ io.on('connection', function(socket){
   socket.on('telemetry', xPercent => {
     users[socket.id] = xPercent
   })
+
 })
 
 setInterval(() => {

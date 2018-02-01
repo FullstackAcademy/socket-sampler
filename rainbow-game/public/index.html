@@ -29,6 +29,7 @@ function intToRGB(i){
         return pos > pos2
       })
       .forEach(([key, pos]) => {
+        if (pos.x) pos = pos.x
         gradient.push('#' + intToRGB(hashCode(key)) + ' ' + pos+'%')
       })
       let css = `linear-gradient(to right, ${gradient.join(',')})`
